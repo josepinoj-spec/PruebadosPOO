@@ -1,5 +1,9 @@
 
-from Vehiculo import Automovil, Motocicleta, Camion
+
+from enum import auto
+
+from mainFlotaVehiculos import Moto
+
 
 class FlotaVehiculo:
     def __init__(self, id_Vehiculo, marca, modelo, Fecha_Fabricacion):
@@ -25,7 +29,7 @@ class FlotaVehiculo:
         return self.__Fecha_Fabricacion
     
     
-class Automovil(Vehiculo):
+class Automovil (auto):
     def __init__(self, id_Vehiculo, marca, modelo, Fecha_Fabricacion, puertas):
         super().__init__(id_Vehiculo, marca, modelo, Fecha_Fabricacion)
         self.puertas = puertas
@@ -37,7 +41,7 @@ class Automovil(Vehiculo):
         return f"[AUTO] {self.id_Vehiculo} - {self.marca} {self.modelo} ({self.Fecha_Fabricacion}), Puertas: {self.puertas}"
 
 
-class Motocicleta(Vehiculo):
+class Motocicleta (Moto):
     def __init__(self, id_Vehiculo, marca, modelo, Fecha_Fabricacion, cilindrada):
         super().__init__(id_Vehiculo, marca, modelo, Fecha_Fabricacion)
         self.cilindrada = cilindrada
@@ -49,7 +53,7 @@ class Motocicleta(Vehiculo):
         return f"[MOTO] {self.id_Vehiculo} - {self.marca} {self.modelo} ({self.Fecha_Fabricacion}), CC: {self.cilindrada}"
 
 
-class Camion(Vehiculo):
+class Camion (Camion): 
     def __init__(self, id_Vehiculo, marca, modelo, FechaFabricacion, capacidad_carga):
         super().__init__(id_Vehiculo, marca, modelo, FechaFabricacion)
         self.capacidad_carga = capacidad_carga
@@ -58,7 +62,7 @@ class Camion(Vehiculo):
         return km * (0.20 + self.capacidad_carga / 10000)
 
     def descripcion(self):
-        return f"[CAMIÓN] {self.id_Vehiculo} - {self.marca} {self.modelo} ({self.Fecha_fabricacion}), Carga: {self.capacidad_carga} kg"
+        return f"[CAMION] {self.id_Vehiculo} - {self.marca} {self.modelo} ({self.Fecha_fabricacion}), Carga: {self.capacidad_carga} kg"
 
 
 # ==============================
