@@ -9,7 +9,7 @@ class FlotaVehiculo:
         self.__Fecha_Fabricacion = Fecha_Fabricacion
         
     @property
-    def identificacion(self):
+    def id_Vehiculo(self):
         return self.__id_Vehiculo
 
     @property
@@ -21,7 +21,7 @@ class FlotaVehiculo:
         return self.__modelo
 
     @property
-    def anio(self):
+    def Fecha_Fabricacion(self):
         return self.__Fecha_Fabricacion
     
     
