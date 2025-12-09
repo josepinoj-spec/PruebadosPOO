@@ -1,27 +1,28 @@
-from clases.empleado_base import EmpleadoBase   
-
+from clases.empresa import Empresa
 from clases.vendedor import Vendedor
 from clases.gerente import Gerente
 from clases.practicante import Practicante
-from clases.empresa import Empresa
-def cargar_datos(empresa):
-    empresa.agregar(Vendedor("Ana Gomez", "V001", 800000, 5000000, 5))
-    empresa.agregar(Gerente("Luis Perez", "G001", 1500000, 300000))
-    empresa.agregar(Practicante("Maria Ruiz", "P001", 80, 5000))        
-    
+# =================
+
+
 def main():
+    empresa = Empresa("TechNova S.A.")
 
-    empresa = Empresa()
-    cargar_datos(empresa)
+    # Crear trabajadores de distintos tipos
+    v1 = Vendedor("Ana Pérez", "12.345.678-9", 800000, ventas_mes=5000000, porcentaje_comision=0.05)
+    v2 = Vendedor("Carlos Díaz", "98.765.432-1", 750000, ventas_mes=2000000, porcentaje_comision=0.03, activo=False)
+    g1 = Gerente("Laura Torres", "11.223.344-5", 1500000, bono_fijo=300000)
+    p1 = Practicante("Mateo Silva", "22.111.333-4", valor_hora=5000, horas_trabajadas=80)
 
-    print("\n=== Empleados Registrados ===")
-    for resumen in empresa.listar_todos():
-        print(resumen)
+    # Agregar al registro de la empresa
+    empresa.agregar_trabajador(v1)
+    empresa.agregar_trabajador(v2)
+    empresa.agregar_trabajador(g1)
+    empresa.agregar_trabajador(p1)
 
-    print("\n=== Empleados Activos ===")
-    for activo in empresa.listar_activos():        
-        print(f"{activo.tipo()}: {activo._nombre} - Remuneración: {activo.calcular_remuneracion():.2f}")            
-    total_gasto = empresa.gasto_total()
-    print(f"\nGasto total en remuneraciones: {total_gasto:.2f}\n")
+    # Mostrar reporte completo
+    empresa.resumen_general()
+
+
 if __name__ == "__main__":
     main()

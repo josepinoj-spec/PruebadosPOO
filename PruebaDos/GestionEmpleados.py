@@ -1,110 +1,108 @@
 
-class EmpleadoBase(Empleado)):
+class Trabajador:
     def __init__(self, nombre, identificacion, sueldo_base, activo=True):
-        self._nombre = nombre
-        self._identificacion = identificacion
-        self._sueldo_base = sueldo_base
-        self._activo = activo
+        self.__nombre = nombre
+        self.__identificacion = identificacion
+        self.__sueldo_base = sueldo_base
+        self.__activo = activo
 
-    @property
-    def nombre(self):
-        return self._nombre
-    
-    @property
-    def identificacion(self):
-        return self._identificacion
-    
-    @property
-    def sueldo_base(self):
-        return self._sueldo_base
-    
-    @property
-    def activo(self):
-        return self._activo
-    
-    @activo.setter
-    def activo(self, valor):
-        self._activo = valor
+    # Encapsulamiento (getters)
+    def get_nombre(self):
+        return self.__nombre
 
-    @abstractmethod
-    def calcular_remuneracion(self):
-        pass
+    def get_identificacion(self):
+        return self.__identificacion
 
-    @abstractmethod
-    def tipo(self):
-        pass
+    def get_sueldo_base(self):
+        return self.__sueldo_base
+
+    def is_activo(self):
+        return self.__activo
+
+    def set_activo(self, estado):
+        self.__activo = estado
+
+    # Polimorfismo — se redefine en subclases
+    def calcular_sueldo_final(self):
+        return self.__sueldo_base
+
+    def resumen(self):
+        tipo = self.__class__.__name__
+        return f"{self.__nombre} ({tipo}) - Sueldo base: ${self.__sueldo_base:,.2f}"
+    
+
+class Vendedor(Trabajador):
+    def __init__(self, nombre, identificacion, sueldo_base, ventas_mes, porcentaje_comision, activo=True):
+        super().__init__(nombre, identificacion, sueldo_base, activo)
+        self.__ventas_mes = ventas_mes
+        self.__porcentaje_comision = porcentaje_comision  # Ejemplo: 0.05 para 5%
+
+    def calcular_sueldo_final(self):
+        comision = self.__ventas_mes * self.__porcentaje_comision
+        return self.get_sueldo_base() + comision
 
     def resumen(self):
         return (
-            f"{self.nombre} | {self.tipo()} | ID: {self.identificacion} | "
-            f"Sueldo base: ${self.sueldo_base} | Pago final: ${self.calcular_remuneracion()}"
+            f"[Vendedor] {self.get_nombre()} | ID: {self.get_identificacion()} | "
+            f"Sueldo base: ${self.get_sueldo_base():,.2f} | "
+            f"Comisión: {self.__porcentaje_comision*100:.1f}% | "
+            f"Sueldo final: ${self.calcular_sueldo_final():,.2f}"
         )
 
 
-
-# ---------- Vendedor (con comisiones) ----------
-class Vendedor(EmpleadoBase):
-    def __init__(self, nombre, identificacion, sueldo_base, ventas_mes, porcentaje_comision, activo=True):
-        super().__init__(nombre, identificacion, sueldo_base, activo)
-        self._ventas_mes = ventas_mes
-        self._porcentaje_comision = porcentaje_comision
-
-    def calcular_remuneracion(self):
-        comision = self._ventas_mes * (self._porcentaje_comision / 100)
-        return self.sueldo_base + comision
-
-    def tipo(self):
-        return "Vendedor"
-
-
-# ---------- Gerente (con bono fijo) ----------
-class Gerente(EmpleadoBase):
+class Gerente(Trabajador):
     def __init__(self, nombre, identificacion, sueldo_base, bono_fijo, activo=True):
         super().__init__(nombre, identificacion, sueldo_base, activo)
-        self._bono_fijo = bono_fijo
+        self.__bono_fijo = bono_fijo
 
-    def calcular_remuneracion(self):
-        return self.sueldo_base + self._bono_fijo
+    def calcular_sueldo_final(self):
+        return self.get_sueldo_base() + self.__bono_fijo
 
-    def tipo(self):
-        return "Gerente"
-
-
-# ---------- Practicante (pago por hora) ----------
-class Practicante(EmpleadoBase):
-    def __init__(self, nombre, identificacion, horas_trabajadas, valor_hora, activo=True):
-        super().__init__(nombre, identificacion, sueldo_base=0, activo=activo)
-        self._horas_trabajadas = horas_trabajadas
-        self._valor_hora = valor_hora
-
-    def calcular_remuneracion(self):
-        return self._horas_trabajadas * self._valor_hora
-
-    def tipo(self):
-        return "Practicante"
+    def resumen(self):
+        return (
+            f"[Gerente] {self.get_nombre()} | ID: {self.get_identificacion()} | "
+            f"Sueldo base: ${self.get_sueldo_base():,.2f} | "
+            f"Bono: ${self.__bono_fijo:,.2f} | "
+            f"Sueldo final: ${self.calcular_sueldo_final():,.2f}"
+        )
 
 
-# ====================================================
-# CLASE EMPRESA — ADMINISTRADOR DE EMPLEADOS
-# ====================================================
+class Practicante(Trabajador):
+    def __init__(self, nombre, identificacion, valor_hora, horas_trabajadas, activo=True):
+        super().__init__(nombre, identificacion, 0, activo)
+        self.__valor_hora = valor_hora
+        self.__horas_trabajadas = horas_trabajadas
+
+    def calcular_sueldo_final(self):
+        return self.__valor_hora * self.__horas_trabajadas
+
+    def resumen(self):
+        return (
+            f"[Practicante] {self.get_nombre()} | ID: {self.get_identificacion()} | "
+            f"Horas: {self.__horas_trabajadas} | Valor hora: ${self.__valor_hora:,.2f} | "
+            f"Sueldo final: ${self.calcular_sueldo_final():,.2f}"
+        )
+
 class Empresa:
-    def __init__(self):
-        self._trabajadores = []
+    def __init__(self, nombre):
+        self.__nombre = nombre
+        self.__trabajadores = []
 
-    def agregar(self, trabajador):
-        self._trabajadores.append(trabajador)
+    def agregar_trabajador(self, trabajador):
+        self.__trabajadores.append(trabajador)
 
-    def listar_todos(self):
-        return self._trabajadores
+    def listar_trabajadores(self):
+        return self.__trabajadores
 
     def listar_activos(self):
-        return [t for t in self._trabajadores if t.activo]
+        return [t for t in self.__trabajadores if t.is_activo()]
 
     def gasto_total(self):
-        return sum(t.calcular_remuneracion() for t in self.listar_activos())
+        return sum(t.calcular_sueldo_final() for t in self.listar_activos())
 
-    def reporte_general(self):
-        return [t.resumen() for t in self._trabajadores]
-
-
+    def resumen_general(self):
+        print(f"\n=== Reporte de Sueldos - {self.__nombre} ===\n")
+        for t in self.listar_trabajadores():
+            print(t.resumen())
+        print(f"\nGasto total mensual (solo activos): ${self.gasto_total():,.2f}")
 

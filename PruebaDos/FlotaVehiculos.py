@@ -1,118 +1,94 @@
 
-from abc import ABC, abstractmethod
-
-# ====================================================
-class FlotaVehiculo(ABC):
-    def __init__(self, id_Vehiculo, marca, modelo, FechaFabricacion):
-        self.__id_Vehiculo = id_Vehiculo
+class Vehiculo:
+    def __init__(self, id_vehiculo, marca, modelo, ano_fabricacion):
+        self.__id_vehiculo = id_vehiculo
         self.__marca = marca
         self.__modelo = modelo
-        self.__FechaFabricacion = FechaFabricacion
-        
-    @property
-    def id_Vehiculo(self):
-        return self.__id_Vehiculo
+        self.__ano_fabricacion = ano_fabricacion
 
-    @property
-    def marca(self):
+    # Encapsulamiento (Getters)
+    def get_id(self):
+        return self.__id_vehiculo
+
+    def get_marca(self):
         return self.__marca
 
-    @property
-    def modelo(self):
+    def get_modelo(self):
         return self.__modelo
 
-    @property
-    def FechaFabricacion(self):
-        return self.__FechaFabricacion
-    
-    # MÉTODOS POLIMÓRFICOS OBLIGATORIOS
-    @abstractmethod
+    def get_anio(self):
+        return self.__ano_fabricacion
+
+    # Polimorfismo 
     def calcular_consumo(self, km):
-        pass
+        raise NotImplementedError("Debe implementarse en las subclases.")
 
-    @abstractmethod
     def descripcion(self):
-        pass
+        raise NotImplementedError("Debe implementarse en las subclases.")
 
 
-# ====================================================
-# CLASES HIJAS — HERENCIA + POLIMORFISMO
-# ====================================================
-
-class Automovil(FlotaVehiculo):
-    def __init__(self, id_Vehiculo, marca, modelo, FechaFabricacion, puertas):
-        super().__init__(id_Vehiculo, marca, modelo, FechaFabricacion)
+class Automovil(Vehiculo):
+    def __init__(self, id_vehiculo, marca, modelo, ano_fabricacion, puertas):
+        super().__init__(id_vehiculo, marca, modelo, ano_fabricacion)
         self.__puertas = puertas
-        
+
     def calcular_consumo(self, km):
-        return max(0, km * 0.10 - (self.__puertas * 0.005))
+        # Consumo base ajustado por número de puertas
+        return km * (0.1 + self.__puertas * 0.005)
 
     def descripcion(self):
-        return (
-            f"[AUTO] {self.id_Vehiculo} - {self.marca} {self.modelo} "
-            f"({self.FechaFabricacion}), Puertas: {self.__puertas}"
-        )
+        return f"[Automóvil] {self.get_id()} - {self.get_marca()} {self.get_modelo()} ({self.get_anio()}) | Puertas: {self.__puertas}"
 
 
-class Motocicleta(FlotaVehiculo):
-    def __init__(self, id_Vehiculo, marca, modelo, FechaFabricacion, cilindrada):
-        super().__init__(id_Vehiculo, marca, modelo, FechaFabricacion)
+class Motocicleta(Vehiculo):
+    def __init__(self, id_vehiculo, marca, modelo, ano_fabricacion, cilindrada):
+        super().__init__(id_vehiculo, marca, modelo, ano_fabricacion)
         self.__cilindrada = cilindrada
 
     def calcular_consumo(self, km):
-        return km * (0.04 + self.__cilindrada / 20000)
+        return km * (0.04 + self.__cilindrada / 20000)  # Motocicletas consumen menos, pero aumenta con la cilindrada
 
     def descripcion(self):
-        return (
-            f"[MOTO] {self.id_Vehiculo} - {self.marca} {self.modelo} "
-            f"({self.FechaFabricacion}), CC: {self.__cilindrada}"
-        )
+        return f"[Motocicleta] {self.get_id()} - {self.get_marca()} {self.get_modelo()} ({self.get_anio()}) | Cilindrada: {self.__cilindrada} cc"
 
 
-class Camion(FlotaVehiculo):
-    def __init__(self, id_Vehiculo, marca, modelo, FechaFabricacion, capacidad_carga):
-        super().__init__(id_Vehiculo, marca, modelo, FechaFabricacion)
-        self.__capacidad_carga = capacidad_carga
+class Camion(Vehiculo):
+    def __init__(self, id_vehiculo, marca, modelo, ano_fabricacion, capacidad_carga):
+        super().__init__(id_vehiculo, marca, modelo, ano_fabricacion)
+        self.__capacidad_carga = capacidad_carga  # en kg
 
     def calcular_consumo(self, km):
-        return km * (0.20 + self.__capacidad_carga / 10000)
+        return km * (0.2 + self.__capacidad_carga / 10000)  # Camiones consumen más, depende de la carga
 
     def descripcion(self):
-        return (
-            f"[CAMIÓN] {self.id_Vehiculo} - {self.marca} {self.modelo} "
-            f"({self.FechaFabricacion}), Carga: {self.__capacidad_carga} kg"
-        )
-
-
-# ====================================================
-# CLASE FLOTA — ADMINISTRA LOS VEHÍCULOS
-# ====================================================
+        return f"[Camión] {self.get_id()} - {self.get_marca()} {self.get_modelo()} ({self.get_anio()}) | Carga: {self.__capacidad_carga} kg"
 
 class Flota:
     def __init__(self):
         self.__vehiculos = {}
 
     def agregar(self, vehiculo):
-        if vehiculo.id_Vehiculo in self.__vehiculos:
-            raise ValueError("Error: La identificación ya existe en la flota.")
-        
-        self.__vehiculos[vehiculo.id_Vehiculo] = vehiculo
+        if vehiculo.get_id() in self.__vehiculos:
+            print(f"El vehículo {vehiculo.get_id()} ya existe en la flota.")
+        else:
+            self.__vehiculos[vehiculo.get_id()] = vehiculo
 
-    def eliminar(self, identificacion):
-        if identificacion not in self.__vehiculos:
-            raise ValueError("Error: Vehículo no encontrado.")
-        del self.__vehiculos[identificacion]
+    def eliminar(self, id_vehiculo):
+        if id_vehiculo in self.__vehiculos:
+            del self.__vehiculos[id_vehiculo]
+            print(f"Vehículo {id_vehiculo} eliminado correctamente.")
+        else:
+            print(f"No se encontró el vehículo con ID {id_vehiculo}.")
 
-    def buscar(self, identificacion):
-        return self.__vehiculos.get(identificacion)
+    def buscar(self, id_vehiculo):
+        return self.__vehiculos.get(id_vehiculo)
 
     def listar(self):
         return [v.descripcion() for v in self.__vehiculos.values()]
 
+    def consumo_individual(self, km):
+        return {vid: v.calcular_consumo(km) for vid, v in self.__vehiculos.items()}
+
     def consumo_total(self, km):
         return sum(v.calcular_consumo(km) for v in self.__vehiculos.values())
-
-    def report_consumos(self, km):
-        return {v.id_Vehiculo: v.calcular_consumo(km) for v in self.__vehiculos.values()}
-
 
