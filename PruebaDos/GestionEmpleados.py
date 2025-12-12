@@ -1,10 +1,18 @@
 
 class Trabajador:
     def __init__(self, nombre, identificacion, sueldo_base, activo=True):
+        # Validaciones básicas
+        if not nombre:
+            raise ValueError("El nombre no puede estar vacío.")
+        if not identificacion:
+            raise ValueError("La identificación no puede estar vacía.")
+        if sueldo_base < 0:
+            raise ValueError("El sueldo base no puede ser negativo.")
+
         self.__nombre = nombre
         self.__identificacion = identificacion
-        self.__sueldo_base = sueldo_base
-        self.__activo = activo
+        self.__sueldo_base = float(sueldo_base)
+        self.__activo = bool(activo)
 
     # Encapsulamiento (getters)
     def get_nombre(self):
@@ -20,7 +28,7 @@ class Trabajador:
         return self.__activo
 
     def set_activo(self, estado):
-        self.__activo = estado
+        self.__activo = bool(estado)
 
     # Polimorfismo — se redefine en subclases
     def calcular_sueldo_final(self):
@@ -29,13 +37,19 @@ class Trabajador:
     def resumen(self):
         tipo = self.__class__.__name__
         return f"{self.__nombre} ({tipo}) - Sueldo base: ${self.__sueldo_base:,.2f}"
-    
+
 
 class Vendedor(Trabajador):
     def __init__(self, nombre, identificacion, sueldo_base, ventas_mes, porcentaje_comision, activo=True):
         super().__init__(nombre, identificacion, sueldo_base, activo)
-        self.__ventas_mes = ventas_mes
-        self.__porcentaje_comision = porcentaje_comision  # Ejemplo: 0.05 para 5%
+
+        if ventas_mes < 0:
+            raise ValueError("Las ventas del mes no pueden ser negativas.")
+        if porcentaje_comision < 0 or porcentaje_comision > 1:
+            raise ValueError("El porcentaje de comisión debe estar entre 0 y 1.")
+
+        self.__ventas_mes = float(ventas_mes)
+        self.__porcentaje_comision = float(porcentaje_comision)  # Ejemplo: 0.05 para 5%
 
     def calcular_sueldo_final(self):
         comision = self.__ventas_mes * self.__porcentaje_comision
@@ -53,7 +67,9 @@ class Vendedor(Trabajador):
 class Gerente(Trabajador):
     def __init__(self, nombre, identificacion, sueldo_base, bono_fijo, activo=True):
         super().__init__(nombre, identificacion, sueldo_base, activo)
-        self.__bono_fijo = bono_fijo
+        if bono_fijo < 0:
+            raise ValueError("El bono fijo no puede ser negativo.")
+        self.__bono_fijo = float(bono_fijo)
 
     def calcular_sueldo_final(self):
         return self.get_sueldo_base() + self.__bono_fijo
@@ -69,9 +85,16 @@ class Gerente(Trabajador):
 
 class Practicante(Trabajador):
     def __init__(self, nombre, identificacion, valor_hora, horas_trabajadas, activo=True):
+        # El practicante tiene sueldo base 0 por definición
         super().__init__(nombre, identificacion, 0, activo)
-        self.__valor_hora = valor_hora
-        self.__horas_trabajadas = horas_trabajadas
+
+        if valor_hora < 0:
+            raise ValueError("El valor hora no puede ser negativo.")
+        if horas_trabajadas < 0:
+            raise ValueError("Las horas trabajadas no pueden ser negativas.")
+
+        self.__valor_hora = float(valor_hora)
+        self.__horas_trabajadas = float(horas_trabajadas)
 
     def calcular_sueldo_final(self):
         return self.__valor_hora * self.__horas_trabajadas
@@ -79,16 +102,24 @@ class Practicante(Trabajador):
     def resumen(self):
         return (
             f"[Practicante] {self.get_nombre()} | ID: {self.get_identificacion()} | "
-            f"Horas: {self.__horas_trabajadas} | Valor hora: ${self.__valor_hora:,.2f} | "
+            f"Horas: {self.__horas_trabajadas:.0f} | Valor hora: ${self.__valor_hora:,.2f} | "
             f"Sueldo final: ${self.calcular_sueldo_final():,.2f}"
         )
 
+
 class Empresa:
     def __init__(self, nombre):
+        if not nombre:
+            raise ValueError("El nombre de la empresa no puede estar vacío.")
         self.__nombre = nombre
         self.__trabajadores = []
 
     def agregar_trabajador(self, trabajador):
+        # Evitar duplicados de identificación
+        for t in self.__trabajadores:
+            if t.get_identificacion() == trabajador.get_identificacion():
+                print(f"⚠️ Ya existe un trabajador con ID {trabajador.get_identificacion()}. No se agrega.")
+                return
         self.__trabajadores.append(trabajador)
 
     def listar_trabajadores(self):
@@ -98,6 +129,7 @@ class Empresa:
         return [t for t in self.__trabajadores if t.is_activo()]
 
     def gasto_total(self):
+        # Solo activos, como lo definiste
         return sum(t.calcular_sueldo_final() for t in self.listar_activos())
 
     def resumen_general(self):

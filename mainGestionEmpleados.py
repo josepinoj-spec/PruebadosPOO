@@ -1,28 +1,22 @@
-from clases.empresa import Empresa
-from clases.vendedor import Vendedor
+
+from clases.trabajador import Trabajador  
 from clases.gerente import Gerente
 from clases.practicante import Practicante
-# =================
-
+from clases.empresa import Empresa
 
 def main():
-    empresa = Empresa("TechNova S.A.")
+    empresa = Empresa("INACAP Servicios")
 
-    # Crear trabajadores de distintos tipos
-    v1 = Vendedor("Ana Pérez", "12.345.678-9", 800000, ventas_mes=5000000, porcentaje_comision=0.05)
-    v2 = Vendedor("Carlos Díaz", "98.765.432-1", 750000, ventas_mes=2000000, porcentaje_comision=0.03, activo=False)
-    g1 = Gerente("Laura Torres", "11.223.344-5", 1500000, bono_fijo=300000)
-    p1 = Practicante("Mateo Silva", "22.111.333-4", valor_hora=5000, horas_trabajadas=80)
+    # Datos de prueba (reales o simulados)
+    t1 = Vendedor("Ana Pérez", "VEN-001", 850000, 5800000, 0.03)
+    t2 = Gerente("Carlos Ruiz", "GER-900", 2500000, 450000)
+    t3 = Practicante("María Gómez", "PRC-123", 4500, 120, activo=False)
+    t4 = Vendedor("Pedro Soto", "VEN-002", 900000, 3250000, 0.025)
 
-    # Agregar al registro de la empresa
-    empresa.agregar_trabajador(v1)
-    empresa.agregar_trabajador(v2)
-    empresa.agregar_trabajador(g1)
-    empresa.agregar_trabajador(p1)
+    for t in (t1, t2, t3, t4):
+        empresa.agregar_trabajador(t)
 
-    # Mostrar reporte completo
     empresa.resumen_general()
 
 
-if __name__ == "__main__":
-    main()
+main()

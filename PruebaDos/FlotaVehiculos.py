@@ -1,4 +1,9 @@
 
+
+# =========================
+# Clases del dominio (sin imports)
+# =========================
+
 class Vehiculo:
     def __init__(self, id_vehiculo, marca, modelo, ano_fabricacion):
         self.__id_vehiculo = id_vehiculo
@@ -33,7 +38,7 @@ class Automovil(Vehiculo):
         self.__puertas = puertas
 
     def calcular_consumo(self, km):
-        # Consumo base ajustado por número de puertas
+        # Consumo base ajustado por número de puertas (ejemplo simple)
         return km * (0.1 + self.__puertas * 0.005)
 
     def descripcion(self):
@@ -49,7 +54,7 @@ class Motocicleta(Vehiculo):
         self.__cilindrada = cilindrada
 
     def calcular_consumo(self, km):
-        # Motocicletas consumen menos; aumenta con la cilindrada
+        # Motocicletas consumen menos; aumenta con la cilindrada (ejemplo simple)
         return km * (0.04 + self.__cilindrada / 20000)
 
     def descripcion(self):
@@ -65,7 +70,7 @@ class Camion(Vehiculo):
         self.__capacidad_carga = capacidad_carga  # en kg
 
     def calcular_consumo(self, km):
-        # Camiones consumen más; depende de la carga
+        # Camiones consumen más; depende de la carga (ejemplo simple)
         return km * (0.2 + self.__capacidad_carga / 10000)
 
     def descripcion(self):
@@ -104,4 +109,3 @@ class Flota:
 
     def consumo_total(self, km):
         return sum(v.calcular_consumo(km) for v in self.__vehiculos.values())
-
