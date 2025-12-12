@@ -1,5 +1,5 @@
 
-from clases.producto import Producto        
+from clases.producto import Producto       
 from clases.producto_fisico import ProductoFisico
 from clases.producto_digital import ProductoDigital
 from clases.carrito import Carrito
