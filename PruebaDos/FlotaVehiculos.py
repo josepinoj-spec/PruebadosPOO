@@ -6,7 +6,7 @@ class Vehiculo:
         self.__modelo = modelo
         self.__ano_fabricacion = ano_fabricacion
 
-    # Encapsulamiento (Getters)
+    # Encapsulamiento (getters)
     def get_id(self):
         return self.__id_vehiculo
 
@@ -19,7 +19,7 @@ class Vehiculo:
     def get_anio(self):
         return self.__ano_fabricacion
 
-    # Polimorfismo 
+    # Métodos polimórficos (a implementar en subclases)
     def calcular_consumo(self, km):
         raise NotImplementedError("Debe implementarse en las subclases.")
 
@@ -37,7 +37,10 @@ class Automovil(Vehiculo):
         return km * (0.1 + self.__puertas * 0.005)
 
     def descripcion(self):
-        return f"[Automóvil] {self.get_id()} - {self.get_marca()} {self.get_modelo()} ({self.get_anio()}) | Puertas: {self.__puertas}"
+        return (
+            f"[Automóvil] {self.get_id()} - {self.get_marca()} {self.get_modelo()} "
+            f"({self.get_anio()}) Puertas: {self.__puertas}"
+        )
 
 
 class Motocicleta(Vehiculo):
@@ -46,10 +49,14 @@ class Motocicleta(Vehiculo):
         self.__cilindrada = cilindrada
 
     def calcular_consumo(self, km):
-        return km * (0.04 + self.__cilindrada / 20000)  # Motocicletas consumen menos, pero aumenta con la cilindrada
+        # Motocicletas consumen menos; aumenta con la cilindrada
+        return km * (0.04 + self.__cilindrada / 20000)
 
     def descripcion(self):
-        return f"[Motocicleta] {self.get_id()} - {self.get_marca()} {self.get_modelo()} ({self.get_anio()}) | Cilindrada: {self.__cilindrada} cc"
+        return (
+            f"[Motocicleta] {self.get_id()} - {self.get_marca()} {self.get_modelo()} "
+            f"({self.get_anio()}) Cilindrada: {self.__cilindrada} cc"
+        )
 
 
 class Camion(Vehiculo):
@@ -58,20 +65,26 @@ class Camion(Vehiculo):
         self.__capacidad_carga = capacidad_carga  # en kg
 
     def calcular_consumo(self, km):
-        return km * (0.2 + self.__capacidad_carga / 10000)  # Camiones consumen más, depende de la carga
+        # Camiones consumen más; depende de la carga
+        return km * (0.2 + self.__capacidad_carga / 10000)
 
     def descripcion(self):
-        return f"[Camión] {self.get_id()} - {self.get_marca()} {self.get_modelo()} ({self.get_anio()}) | Carga: {self.__capacidad_carga} kg"
+        return (
+            f"[Camión] {self.get_id()} - {self.get_marca()} {self.get_modelo()} "
+            f"({self.get_anio()}) Carga: {self.__capacidad_carga} kg"
+        )
+
 
 class Flota:
     def __init__(self):
         self.__vehiculos = {}
 
     def agregar(self, vehiculo):
-        if vehiculo.get_id() in self.__vehiculos:
-            print(f"El vehículo {vehiculo.get_id()} ya existe en la flota.")
+        vid = vehiculo.get_id()
+        if vid in self.__vehiculos:
+            print(f"El vehículo {vid} ya existe en la flota.")
         else:
-            self.__vehiculos[vehiculo.get_id()] = vehiculo
+            self.__vehiculos[vid] = vehiculo
 
     def eliminar(self, id_vehiculo):
         if id_vehiculo in self.__vehiculos:
