@@ -174,4 +174,3 @@ class Carrito:
             cantidad = item["cantidad"]
             producto.restaurar_stock(cantidad)
             self.__items.pop(codigo)
-

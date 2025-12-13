@@ -1,9 +1,4 @@
 
-
-# =========================
-# Clases del dominio (sin imports)
-# =========================
-
 class Vehiculo:
     def __init__(self, id_vehiculo, marca, modelo, ano_fabricacion):
         self.__id_vehiculo = id_vehiculo
@@ -109,3 +104,4 @@ class Flota:
 
     def consumo_total(self, km):
         return sum(v.calcular_consumo(km) for v in self.__vehiculos.values())
+    

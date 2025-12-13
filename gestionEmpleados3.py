@@ -118,7 +118,7 @@ class Empresa:
         # Evitar duplicados de identificación
         for t in self.__trabajadores:
             if t.get_identificacion() == trabajador.get_identificacion():
-                print(f"⚠️ Ya existe un trabajador con ID {trabajador.get_identificacion()}. No se agrega.")
+                print(f" Ya existe un trabajador con ID {trabajador.get_identificacion()}. No se agrega.")
                 return
         self.__trabajadores.append(trabajador)
 
@@ -137,4 +137,3 @@ class Empresa:
         for t in self.listar_trabajadores():
             print(t.resumen())
         print(f"\nGasto total mensual (solo activos): ${self.gasto_total():,.2f}")
-

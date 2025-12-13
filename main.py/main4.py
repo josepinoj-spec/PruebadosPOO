@@ -1,8 +1,7 @@
 
-
-from clases.producto_fisico import ProductoFisico
-from clases.producto_digital import ProductoDigital
-from clases.carrito import Carrito
+from ejercicio4.clases.VentaProductos import ProductoFisico
+from ejercicio4.clases.VentaProductos import ProductoDigital
+from ejercicio4.clases.VentaProductos import Carrito
 
 def main():
     # Crear productos

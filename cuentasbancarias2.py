@@ -1,5 +1,4 @@
 
-
 class Cuenta:
     """Clase base para cuentas bancarias.
     Encapsula número, titular, saldo y tipo; registra movimientos.

@@ -1,10 +1,9 @@
 
+from ejercicio1.clases.flota  import Flota
+from ejercicio1.clases.flota  import Automovil
+from ejercicio1.clases.flota  import Motocicleta
+from ejercicio1.clases.flota  import Camion
 
-
-from clases.flota import Flota
-from clases.automovil import Automovil
-from clases.motocicleta import Motocicleta
-from clases.camion import Camion
 
 def main():
     flota = Flota()

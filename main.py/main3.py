@@ -1,9 +1,9 @@
 
-from clases.trabajador import Trabajador  
-from clases.gerente import Gerente
-from clases.practicante import Practicante
-from clases.empresa import Empresa
-
+from ejercicio3.clases.GestionEmpleados   import Trabajador  
+from ejercicio3.clases.GestionEmpleados   import Gerente
+from ejercicio3.clases.GestionEmpleados   import Practicante
+from ejercicio3.clases.GestionEmpleados   import Empresa
+from ejercicio3.clases.GestionEmpleados   import Vendedor
 def main():
     empresa = Empresa("INACAP Servicios")
 

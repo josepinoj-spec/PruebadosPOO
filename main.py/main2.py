@@ -1,8 +1,8 @@
 
-
-from clases.cuentacorriente import CuentaCorriente
-from clases.cuentaahorro import CuentaAhorro
-from clases.banco import Banco
+from ejercicio2.clases.CuentasBancarias import Cuenta
+from ejercicio2.clases.CuentasBancarias import CuentaCorriente
+from ejercicio2.clases.CuentasBancarias import CuentaAhorro
+from ejercicio2.clases.CuentasBancarias import Banco
 
 def main():
     banco = Banco("Banco PulsR")
